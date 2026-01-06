@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Proyecto_servicio.Paginas.Admin.AgregarTrabajadorPage"
+
+             BackgroundColor="#dfdaca">
+    <ScrollView>
+        <VerticalStackLayout Padding="30" Spacing="18">
+
+            <Label Text="Agregar trabajador"
+                   FontSize="28"
+                   FontAttributes="Bold"
+                   TextColor="#154369"
+                   HorizontalOptions="Center"/>
+
+            <Entry x:Name="entryNombre"
+                   Placeholder="Nombre"
+                   BackgroundColor="AntiqueWhite"
+                   TextColor="Black"/>
+
+            <Entry x:Name="entryApP"
+                   Placeholder="Apellido paterno"
+                   BackgroundColor="AntiqueWhite"
+                   TextColor="Black"/>
+
+            <Entry x:Name="entryApM"
+                   Placeholder="Apellido materno"
+                   BackgroundColor="AntiqueWhite"
+                   TextColor="Black"/>
+
+            <Entry x:Name="entryEmail"
+                   Placeholder="Correo electrónico"
+                   Keyboard="Email"
+                   BackgroundColor="AntiqueWhite"
+                   TextColor="Black"/>
+
+            <Entry x:Name="entryCargo"
+                   Placeholder="Cargo"
+                   BackgroundColor="AntiqueWhite"
+                   TextColor="Black"/>
+
+            <Entry x:Name="entryDepartamento"
+                   Placeholder="Departamento"
+                   BackgroundColor="AntiqueWhite"
+                   TextColor="Black"/>
+
+            <Entry x:Name="entryPassword"
+                   Placeholder="Contraseña"
+                   IsPassword="True"
+                   BackgroundColor="AntiqueWhite"
+                   TextColor="Black"/>
+            
+            <Entry x:Name="entryConfirmPassword"
+                   Placeholder="Confirmar Contraseña"
+                   IsPassword="True"
+                   BackgroundColor="AntiqueWhite"
+                   TextColor="Black"/>
+            
+            <Button Text="Guardar trabajador"
+                    BackgroundColor="#005f73"
+                    TextColor="White"
+                    FontAttributes="Bold"
+                    CornerRadius="15"
+                    Clicked="OnGuardarTrabajadorClicked"/>
+
+            <Button Text="Cancelar"
+                     BackgroundColor="#005f73"
+                    TextColor="White"
+                    Clicked="OnCancelarClicked"/>
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

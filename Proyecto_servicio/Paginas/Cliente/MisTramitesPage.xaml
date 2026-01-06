@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Proyecto_servicio.Paginas.MisTramitesPage"
+             BackgroundColor="#dfdaca">
+
+    <VerticalStackLayout Padding="20">
+
+        <Label Text="Mis trámites"
+               FontSize="24"
+               FontAttributes="Bold"
+               HorizontalOptions="Center"/>
+
+        <CollectionView x:Name="tramitesCollection">
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Frame Margin="5"
+                           Padding="10"
+                           CornerRadius="12"
+                           BackgroundColor="Black">
+                        <VerticalStackLayout>
+                            <Label Text="{Binding TipoTramite}"
+                                   FontAttributes="Bold"
+                                   FontSize="18"/>
+
+                            <Label Text="{Binding Estado}" />
+
+                            <Label Text="{Binding FechaCreacion}"
+                                   FontSize="12"
+                                   TextColor="Gray"/>
+                        </VerticalStackLayout>
+                    </Frame>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+
+    </VerticalStackLayout>
+</ContentPage>

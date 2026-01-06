@@ -1,0 +1,106 @@
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Proyecto_servicio.Paginas.LoginPage"
+             Title=""
+             BackgroundColor="Black"
+             Shell.BackgroundColor="Black">
+
+
+    <Grid RowDefinitions=".3*, .7*">
+        <Image
+            Source="https://i.pinimg.com/1200x/40/1f/48/401f4810edc46290f7176cd8af5b2af5.jpg "
+            Aspect="AspectFill"
+            Margin="0,-30,-50,-10"/>
+
+        <Label
+            Text="BIENVENID@"
+            FontSize="50"
+            VerticalOptions="Center"
+            FontAttributes="Bold"
+            TextColor="White"
+            FontFamily="BACKCOUNTRY"
+            TextTransform="Uppercase"
+            Margin="50,0,0,0"/>
+
+        <Border Style="{StaticResource CircularBorder}" Margin="10,0,50,10">
+            <Image
+                Source="logog.png"
+                Aspect="AspectFill"
+                WidthRequest="200"
+                HeightRequest="200"
+                
+               />
+        </Border>
+        
+        <Grid ColumnDefinitions="*,*">
+
+        </Grid>
+
+        <Grid Grid.Row="1">
+            <RoundRectangle
+                Margin="-5,10,-5,-2"
+                CornerRadius="30,30,0,0"
+                Fill="#dfdaca"
+                Opacity="0.9"/>
+
+            <Image
+                Source="fondo.png"
+                Aspect="AspectFill"
+                Margin="-5,10,-5,-2"
+                Opacity="0.4"/>
+
+            <VerticalStackLayout
+                   Padding="30" Spacing="15" >
+                <Label Text="Inicio de Sesión"
+                       FontSize="28"
+                       HorizontalOptions="Center" 
+                       FontAttributes="Bold"
+                       TextColor="White"
+                       FontFamily="BACKCOUNTRY"
+                       TextTransform="Uppercase"/>
+                <Entry Placeholder="Usuario"
+                   x:Name="entryUsuario"
+                   FontSize="16"
+                   ClearButtonVisibility="WhileEditing"
+                   BackgroundColor="White"
+                   TextColor="Black"
+                   HeightRequest="45"
+                   FontFamily="BACKCOUNTRY"/>
+
+
+                <Entry 
+            Placeholder="Contraseña"
+            x:Name="entryPassword"
+            
+            IsPassword="True"
+            FontSize="16"
+            BackgroundColor="White"
+            TextColor="Black"
+            HeightRequest="45" />
+
+                <Button Text="Iniciar sesión"
+                        Clicked="OnLoginClicked"
+                        BackgroundColor="#154369"
+                        TextColor="White"
+                        FontSize="18"
+                        CornerRadius="12"
+                        HeightRequest="50" 
+                         FontFamily="BACKCOUNTRY"
+                        FontAttributes="Bold"/>
+                <Button Text="¿Olvidaste tu contraseña?"
+         Clicked="ForgotPasswordClicked"
+         WidthRequest="250"/>
+                <Button Text="Registrarse"
+             Clicked="OnRegisterClicked"
+             BackgroundColor="#005f73"
+             TextColor="White"
+             FontSize="18"
+             CornerRadius="12"
+             HeightRequest="50"
+                         FontFamily="BACKCOUNTRY"
+                        FontAttributes="Bold"/>
+
+            </VerticalStackLayout>
+        </Grid>
+    </Grid>
+</ContentPage>

@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Proyecto_servicio.Paginas.Admin.EliminarCuentasPage"
+             BackgroundColor="#dfdaca">
+    <Grid Padding="20" RowDefinitions="Auto,*">
+
+        <!-- TÍTULO -->
+        <Label Text="Eliminar cuentas"
+               Grid.Row="0"
+               FontSize="26"
+               FontAttributes="Bold"
+               TextColor="#154369"
+               HorizontalOptions="Center"/>
+
+        <!-- CONTENIDO -->
+        <Grid Grid.Row="1"
+              ColumnDefinitions="*,*"
+              ColumnSpacing="20">
+
+            <!-- ================= USUARIOS ================= -->
+            <VerticalStackLayout Grid.Column="0" Spacing="10">
+
+                <Label Text="Usuarios"
+                       FontSize="20"
+                       FontAttributes="Bold"
+                       TextColor="#001219"
+                       HorizontalOptions="Center"/>
+
+                <CollectionView x:Name="usuariosCollection"
+                                SelectionMode="Single"
+                                HeightRequest="350">
+
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Frame BorderColor="#ccc"
+                                   CornerRadius="15"
+                                   Padding="10"
+                                   Margin="5">
+                                <VerticalStackLayout>
+                                    <Label Text="{Binding NombreCompleto}"
+                                           FontAttributes="Bold"/>
+                                    <Label Text="{Binding Email}"
+                                           FontSize="12"/>
+                                </VerticalStackLayout>
+                            </Frame>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+
+                </CollectionView>
+
+                <Button Text="Eliminar usuario"
+                        BackgroundColor="#ae2012"
+                        TextColor="White"
+                        CornerRadius="15"
+                        Clicked="OnEliminarUsuarioClicked"/>
+            </VerticalStackLayout>
+
+            <!-- ================= TRABAJADORES ================= -->
+            <VerticalStackLayout Grid.Column="1" Spacing="10">
+
+                <Label Text="Trabajadores"
+                       FontSize="20"
+                       FontAttributes="Bold"
+                       TextColor="#001219"
+                       HorizontalOptions="Center"/>
+
+                <CollectionView x:Name="trabajadoresCollection"
+                                SelectionMode="Single"
+                                HeightRequest="350">
+
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Frame BorderColor="#ccc"
+                                   CornerRadius="15"
+                                   Padding="10"
+                                   Margin="5">
+                                <VerticalStackLayout>
+                                    <Label Text="{Binding NombreCompleto}"
+                                           FontAttributes="Bold"/>
+                                    <Label Text="{Binding Email}"
+                                           FontSize="12"/>
+                                </VerticalStackLayout>
+                            </Frame>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+
+                </CollectionView>
+
+                <Button Text="Eliminar trabajador"
+                        BackgroundColor="#9b2226"
+                        TextColor="White"
+                        CornerRadius="15"
+                        Clicked="OnEliminarTrabajadorClicked"/>
+            </VerticalStackLayout>
+
+        </Grid>
+    </Grid>
+</ContentPage>

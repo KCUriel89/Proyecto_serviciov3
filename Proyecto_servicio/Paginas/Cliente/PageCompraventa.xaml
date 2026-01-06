@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Proyecto_servicio.Paginas.PageCompraventa"
+             Title="PageCompraventa">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <!-- Menu Button -->
+        <HorizontalStackLayout Grid.Row="0" Padding="10,10,0,0">
+            <Button x:Name="MenuButton"
+                 Text="☰"
+                 FontSize="24"
+                 Clicked="OnMenuButtonClickedCV"
+                 HorizontalOptions="Start"/>
+        </HorizontalStackLayout>
+        <!-- Popup Menu -->
+        <StackLayout x:Name="MenuOptions"
+                  IsVisible="False"
+                  BackgroundColor="#EEEEEE"
+                  Padding="10"
+                  VerticalOptions="Start"
+                  HorizontalOptions="Start"
+                  Margin="10,50,0,0"
+                  ZIndex="1"
+                  WidthRequest="200">
+            <Button Text="Inicio" Clicked="OnPagina1Clicked"/>
+            <Button Text="Registro Compraventa" Clicked="OnPagina2Clicked"/>
+            <Button Text="Testamentos" Clicked="OnPagina3Clicked"/>
+            <Button Text="Cerrar sesión" Clicked="OnCerrarSesionClicked" BackgroundColor="#FF6666" TextColor="White"/>
+        </StackLayout>
+        <!-- Main Content -->
+        <StackLayout Grid.Row="1" Padding="20">
+            <Label Text="Bienvenido a la página principal" FontSize="20"/>
+        </StackLayout>
+    </Grid>
+</ContentPage>

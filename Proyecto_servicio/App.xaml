@@ -1,0 +1,32 @@
+﻿<?xml version = "1.0" encoding = "UTF-8" ?>
+<Application xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:Proyecto_servicio"
+             x:Class="Proyecto_servicio.App">
+    <Application.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Resources/Styles/Colors.xaml" />
+                <ResourceDictionary Source="Resources/Styles/Styles.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+
+            <ResourceDictionary>
+                <Style x:Key="CircularBorder" TargetType="Border">
+                    <Setter Property="WidthRequest" Value="200" />
+                    <Setter Property="HeightRequest" Value="200" />
+                    <Setter Property="HorizontalOptions" Value="End" />
+                    <Setter Property="VerticalOptions" Value="End" />
+                    <Setter Property="Stroke" Value="White" />
+                    <Setter Property="StrokeThickness" Value="0" />
+                    <Setter Property="Padding" Value="0" />
+                    <Setter Property="BackgroundColor" Value="Transparent" />
+                    <Setter Property="StrokeShape">
+                        <Setter.Value>
+                            <RoundRectangle CornerRadius="100" />
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </ResourceDictionary>
+        </ResourceDictionary>
+    </Application.Resources>
+</Application>

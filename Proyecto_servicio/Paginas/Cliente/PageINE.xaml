@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Proyecto_servicio.Paginas.PageINE"
+             BackgroundColor="#dfdaca">
+    <ScrollView><Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <!-- Menu Button -->
+        <HorizontalStackLayout Grid.Row="0" Padding="10,10,0,0">
+            <Button x:Name="MenuButton"
+                 Text="☰"
+                 FontSize="24"
+                 Clicked="OnMenuButtonClickedINE"
+                 HorizontalOptions="Start"/>
+        </HorizontalStackLayout>
+        <!-- Popup Menu -->
+        <StackLayout x:Name="MenuOptions"
+                  IsVisible="False"
+                  BackgroundColor="#EEEEEE"
+                  Padding="10"
+                  VerticalOptions="Start"
+                  HorizontalOptions="Start"
+                  Margin="10,50,0,0"
+                  ZIndex="1"
+                  WidthRequest="200">
+            <Button Text="Inicio" Clicked="OnPagina1Clicked"/>
+            <Button Text="Registro Compraventa" Clicked="OnPagina2Clicked"/>
+            <Button Text="Testamentos" Clicked="OnPagina3Clicked"/>
+            <Button Text="Cerrar sesión" Clicked="OnCerrarSesionClicked" BackgroundColor="#FF6666" TextColor="White"/>
+        </StackLayout>
+        <!-- Main Content -->
+        <StackLayout Grid.Row="1" Padding="20">
+                <Label
+                Text="Trámite de Credencial INE"
+                FontSize="24"
+                FontAttributes="Bold"
+                TextColor="#005f73" />
+
+                <Entry
+                x:Name="entryCURP"
+                Placeholder="CURP"
+                TextColor="Black"
+                BackgroundColor="White"
+                PlaceholderColor="Black"
+                    TextChanged="EntryCURP_TextChanged"
+                 MaxLength="18" />
+
+                <Label Text="Documentos que ya tienes:" FontAttributes="Bold"/>
+
+               
+
+                <Button Text="Subir Acta de Nacimiento"
+                    Clicked="BtnActa_Clicked"/>
+
+
+                <Button Text="Subir Comprobante de domicilio"
+                    Clicked="BtnComprobante_Clicked"/>
+
+
+                <Button Text="Subir Identificación con fotografía"
+                    Clicked="BtnIdentificacion_Clicked"/>
+            
+                <Button
+                Text="Registrar trámite"
+                Clicked="BtnEnviar_Clicked"
+                BackgroundColor="#0a9396"
+                TextColor="White"
+                CornerRadius="12"/>
+
+            </StackLayout>
+    </Grid>
+    </ScrollView>
+</ContentPage>
