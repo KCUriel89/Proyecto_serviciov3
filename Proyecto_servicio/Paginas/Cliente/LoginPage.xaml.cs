@@ -34,7 +34,6 @@ namespace Proyecto_servicio.Paginas
                 UserSession.Email = (string)user["Email"];
                 UserSession.Rol = "Usuario";
 
-                await DisplayAlert("Bienvenido", $"Hola {user["Email"]}", "OK");
                 await Navigation.PushAsync(new PaginaPrincipal());
                 return;
             }
@@ -46,11 +45,6 @@ namespace Proyecto_servicio.Paginas
                 UserSession.IdUsuario = (int)admin["ID_Administrador"];
                 UserSession.Email = (string)admin["Email"];
                 UserSession.Rol = "Admin";
-
-                await DisplayAlert(
-                    "Bienvenido",
-                    $"Hola Administrador {admin["Email"]}",
-                    "OK");
 
                 await Navigation.PushAsync(new AdminPage());
                 return;
@@ -66,7 +60,7 @@ namespace Proyecto_servicio.Paginas
                 UserSession.Email = (string)trabajador["Email"];
                 UserSession.Rol = "Trabajador";
 
-                await DisplayAlert("Bienvenido", $"Hola {trabajador["Email"]}", "OK");
+   
                 await Navigation.PushAsync(new TrabajadorPage());
                 return;
             }

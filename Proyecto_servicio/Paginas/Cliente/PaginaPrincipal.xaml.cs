@@ -1,6 +1,5 @@
 using Proyecto_servicio.Paginas;
 
-
 namespace Proyecto_servicio.Paginas;
 
 public partial class PaginaPrincipal : ContentPage
@@ -50,6 +49,11 @@ public partial class PaginaPrincipal : ContentPage
     private async void OnMisTramitesClicked(object sender, EventArgs e)
     {
         await Navigation.PushAsync(new MisTramitesPage());
+    }
+   
+           private async void OnMisContratosClicked(object sender, EventArgs e)
+    {
+        await Navigation.PushAsync(new MisContratosPage());
     }
     private async void Imagen_Tapped(object sender, TappedEventArgs e)
     {

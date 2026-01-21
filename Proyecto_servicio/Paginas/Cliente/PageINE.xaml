@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Proyecto_servicio.Paginas.PageINE"
              BackgroundColor="#dfdaca">
-    <ScrollView><Grid>
+    <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
@@ -33,13 +33,13 @@
         </StackLayout>
         <!-- Main Content -->
         <StackLayout Grid.Row="1" Padding="20">
-                <Label
+            <Label
                 Text="Trámite de Credencial INE"
                 FontSize="24"
                 FontAttributes="Bold"
                 TextColor="#005f73" />
 
-                <Entry
+            <Entry
                 x:Name="entryCURP"
                 Placeholder="CURP"
                 TextColor="Black"
@@ -48,29 +48,28 @@
                     TextChanged="EntryCURP_TextChanged"
                  MaxLength="18" />
 
-                <Label Text="Documentos que ya tienes:" FontAttributes="Bold"/>
+            <Label Text="Documentos que ya tienes:" FontAttributes="Bold"/>
 
-               
 
-                <Button Text="Subir Acta de Nacimiento"
+
+            <Button Text="Subir Acta de Nacimiento"
                     Clicked="BtnActa_Clicked"/>
 
 
-                <Button Text="Subir Comprobante de domicilio"
+            <Button Text="Subir Comprobante de domicilio"
                     Clicked="BtnComprobante_Clicked"/>
 
 
-                <Button Text="Subir Identificación con fotografía"
+            <Button Text="Subir Identificación con fotografía"
                     Clicked="BtnIdentificacion_Clicked"/>
-            
-                <Button
+
+            <Button
                 Text="Registrar trámite"
                 Clicked="BtnEnviar_Clicked"
                 BackgroundColor="#0a9396"
                 TextColor="White"
                 CornerRadius="12"/>
 
-            </StackLayout>
+        </StackLayout>
     </Grid>
-    </ScrollView>
 </ContentPage>

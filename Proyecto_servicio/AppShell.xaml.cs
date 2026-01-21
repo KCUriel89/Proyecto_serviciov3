@@ -1,5 +1,5 @@
 ﻿using Microsoft.Maui.Controls;
-
+using Proyecto_servicio.Paginas;
 namespace Proyecto_servicio
 {
     public partial class AppShell : Shell
@@ -8,6 +8,8 @@ namespace Proyecto_servicio
         {
             InitializeComponent();
 
+            Routing.RegisterRoute(nameof(VisorDocumentoPage), typeof(VisorDocumentoPage));
         }
+
     }
 }

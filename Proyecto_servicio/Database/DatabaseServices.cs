@@ -10,8 +10,9 @@ namespace Proyecto_servicio.DataBase
     public abstract class ConnectionToSQL
     {
         private readonly string connectionString =
-           "Server=DESKTOP-38IFLSE\\KCSQL;Database=Moneki;Trusted_Connection=True;TrustServerCertificate=True;";
-
+           "Server=DESKTOP-N3GOVNS\\KCU_PRUEBA;Database=Moneki;Trusted_Connection=True;TrustServerCertificate=True;";
+        //escritorio DESKTOP-38IFLSE\KCSQL
+        //laptop DESKTOP-N3GOVNS\\KCU_PRUEBA
 
         protected SqlConnection GetConnection()
         {
@@ -352,6 +353,96 @@ namespace Proyecto_servicio.DataBase
             return lista;
         }
         // ===================== Tramites =====================
+
+        public async Task<INECompleto> ObtenerINECompleto(int idTramite)
+        {
+            using var conn = GetConnection();
+            await conn.OpenAsync();
+
+            string sql = @"
+SELECT 
+    t.ID_Tramite,
+    i.CURP,
+    t.Estado,
+    t.FechaCreacion,
+
+    i.ActaNacimiento,
+    i.ComprobanteDomicilio,
+    i.Identificacion
+
+FROM Tramites t
+INNER JOIN TramiteINE i ON i.ID_Tramite = t.ID_Tramite
+WHERE t.ID_Tramite = @id";
+
+            using var cmd = new SqlCommand(sql, conn);
+            cmd.Parameters.AddWithValue("@id", idTramite);
+
+            using var rd = await cmd.ExecuteReaderAsync();
+
+            if (!rd.Read())
+                return null;
+
+            return new INECompleto
+            {
+                IdTramite = rd.GetInt32(0),
+                CURP = rd.IsDBNull(1) ? "" : rd.GetString(1),
+                Estado = rd.IsDBNull(2) ? "" : rd.GetString(2),
+                Fecha = rd.GetDateTime(3),
+
+                ActaNacimiento = rd.IsDBNull(4) ? null : (byte[])rd[4],
+                ComprobanteDomicilio = rd.IsDBNull(5) ? null : (byte[])rd[5],
+                Identificacion = rd.IsDBNull(6) ? null : (byte[])rd[6]
+            };
+        }
+
+        string DetectarTipo(byte[] bytes)
+        {
+            if (bytes.Length > 4 && bytes[0] == 0x25 && bytes[1] == 0x50)
+                return "pdf";
+            if (bytes[0] == 0xFF && bytes[1] == 0xD8)
+                return "jpg";
+            if (bytes[0] == 0x89 && bytes[1] == 0x50)
+                return "png";
+
+            return "bin"; // desconocido
+        }
+        
+
+        public async Task<List<TramiteINEItem>> ObtenerMisTramitesINEAsync(int idUsuario)
+        {
+            List<TramiteINEItem> lista = new();
+
+            using var conn = GetConnection();
+            await conn.OpenAsync();
+
+            var cmd = new SqlCommand(@"
+        SELECT 
+            t.ID_Tramite,
+            i.CURP,
+            t.Estado,
+            t.FechaCreacion
+        FROM Tramites t
+        INNER JOIN TramiteINE i ON i.ID_Tramite = t.ID_Tramite
+        WHERE t.ID_Usuario = @id", conn);
+
+            cmd.Parameters.AddWithValue("@id", idUsuario);
+
+            using var rd = await cmd.ExecuteReaderAsync();
+            while (await rd.ReadAsync())
+            {
+                lista.Add(new TramiteINEItem
+                {
+                    IdTramite = rd.GetInt32(0),
+                    CURP = rd.GetString(1),
+                    Estado = rd.GetString(2),
+                    FechaCreacion = rd.GetDateTime(3)
+                });
+            }
+
+            return lista;
+        }
+
+
         public async Task CrearTramiteINEAsync(TramiteINEModel model)
         {
             if (!UserSession.IsLoggedIn)
@@ -476,6 +567,207 @@ namespace Proyecto_servicio.DataBase
 
             return lista;
         }
+        public async Task CrearTramiteCompraventaAsync(
+            string tipoBien,
+            string vendedor,
+            string comprador,
+            decimal monto,
+            byte[] contrato,
+            byte[] idVendedor,
+            byte[] idComprador)
+        {
+            using SqlConnection conn = GetConnection();
+            await conn.OpenAsync();
+
+            SqlTransaction tx = conn.BeginTransaction();
+
+            try
+            {
+                // 1️⃣ Tramite general
+                string qTramite = @"
+                    INSERT INTO Tramites (ID_Usuario, TipoTramite)
+                    OUTPUT INSERTED.ID_Tramite
+                    VALUES (@ID_Usuario, 'COMPRAVENTA')";
+
+                int idTramite;
+
+                using (SqlCommand cmd = new SqlCommand(qTramite, conn, tx))
+                {
+                    cmd.Parameters.Add("@ID_Usuario", SqlDbType.Int)
+                        .Value = UserSession.IdUsuario;
+
+                    idTramite = (int)await cmd.ExecuteScalarAsync();
+                }
+
+                // 2️⃣ Compraventa
+                string qCompra = @"
+                    INSERT INTO TramiteCompraventa
+                    (ID_Tramite, TipoBien, Vendedor, Comprador, Monto,
+                     Contrato, IdentificacionVendedor, IdentificacionComprador)
+                    VALUES
+                    (@ID_Tramite, @TipoBien, @Vendedor, @Comprador, @Monto,
+                     @Contrato, @IdVendedor, @IdComprador)";
+
+                using (SqlCommand cmd = new SqlCommand(qCompra, conn, tx))
+                {
+                    cmd.Parameters.Add("@ID_Tramite", SqlDbType.Int).Value = idTramite;
+                    cmd.Parameters.Add("@TipoBien", SqlDbType.VarChar).Value = tipoBien;
+                    cmd.Parameters.Add("@Vendedor", SqlDbType.VarChar).Value = vendedor;
+                    cmd.Parameters.Add("@Comprador", SqlDbType.VarChar).Value = comprador;
+                    cmd.Parameters.Add("@Monto", SqlDbType.Decimal).Value = monto;
+                    cmd.Parameters.Add("@Contrato", SqlDbType.VarBinary).Value = contrato;
+                    cmd.Parameters.Add("@IdVendedor", SqlDbType.VarBinary).Value = idVendedor;
+                    cmd.Parameters.Add("@IdComprador", SqlDbType.VarBinary).Value = idComprador;
+
+                    await cmd.ExecuteNonQueryAsync();
+                }
+
+                tx.Commit();
+            }
+            catch
+            {
+                tx.Rollback();
+                throw;
+            }
+        }
+        public async Task<List<ContratoViewModel>> ObtenerMisContratosAsync(int idUsuario)
+        {
+            var lista = new List<ContratoViewModel>();
+
+            using var conn = GetConnection();
+            await conn.OpenAsync();
+
+            var cmd = new SqlCommand(@"
+        SELECT ID_Tramite, TipoTramite, Estado, FechaCreacion
+        FROM Tramites
+        WHERE ID_Usuario = @id
+        AND TipoTramite IN ('COMPRAVENTA','TESTAMENTO','SUCESION')", conn);
+
+            cmd.Parameters.AddWithValue("@id", idUsuario);
+
+            var rd = await cmd.ExecuteReaderAsync();
+            while (await rd.ReadAsync())
+            {
+                lista.Add(new ContratoViewModel
+                {
+                    ID_Tramite = rd.GetInt32(0),
+                    TipoTramite = rd.GetString(1),
+                    Estado = rd.GetString(2),
+                    FechaCreacion = rd.GetDateTime(3)
+                });
+            }
+
+            return lista;
+        }
+        public async Task<ContratoCompleto> ObtenerContratoCompleto(int idTramite)
+        {
+            using var conn = GetConnection();
+            await conn.OpenAsync();
+
+            string sql = @"
+SELECT 
+    t.ID_Tramite,
+    t.TipoTramite,
+    t.Estado,
+    t.Observaciones,
+    t.FechaCreacion,
+
+    -- INE
+    i.CURP,
+    i.ActaNacimiento,
+    i.ComprobanteDomicilio,
+    i.Identificacion,
+
+    -- COMPRAVENTA
+    c.Vendedor,
+    c.Comprador,
+    c.TipoBien,
+    c.Monto,
+    c.ContratoPDF,
+    c.IdentificacionVendedor,
+    c.IdentificacionComprador,
+
+    -- TESTAMENTO
+    te.EstadoCivil,
+    te.TieneHijos,
+    te.NumeroHijos,
+    te.BienesDeclarados,
+
+    -- SUCESION
+    s.TipoSucesion,
+    s.NombreFallecido,
+    s.FechaDefuncion,
+    s.NumeroHerederos
+
+FROM Tramites t
+LEFT JOIN TramiteINE i ON i.ID_Tramite = t.ID_Tramite
+LEFT JOIN TramiteCompraventa c ON c.ID_Tramite = t.ID_Tramite
+LEFT JOIN TramiteTestamento te ON te.ID_Tramite = t.ID_Tramite
+LEFT JOIN TramiteSucesion s ON s.ID_Tramite = t.ID_Tramite
+WHERE t.ID_Tramite = @id";
+
+            using var cmd = new SqlCommand(sql, conn);
+            cmd.Parameters.AddWithValue("@id", idTramite);
+
+            using var rd = await cmd.ExecuteReaderAsync();
+            if (!rd.Read()) return null;
+
+            var contrato = new ContratoCompleto
+            {
+                IdTramite = rd.GetInt32(0),
+                TipoTramite = rd.GetString(1),
+                Estado = rd.GetString(2),
+                Observaciones = rd.IsDBNull(3) ? "" : rd.GetString(3),
+                Fecha = rd.GetDateTime(4)
+            };
+
+
+            // ============ INE ============
+            if (contrato.TipoTramite == "INE")
+            {
+                contrato.Contenido = $"CURP: {rd["CURP"]}";
+                contrato.Documento1 = rd["ActaNacimiento"] as byte[];
+                contrato.Documento2 = rd["ComprobanteDomicilio"] as byte[];
+                contrato.Documento3 = rd["Identificacion"] as byte[];
+            }
+
+            // ============ COMPRAVENTA ============
+            if (contrato.TipoTramite == "COMPRAVENTA")
+            {
+                contrato.Contenido =
+                    $"Vendedor: {rd["Vendedor"]}\n" +
+                    $"Comprador: {rd["Comprador"]}\n" +
+                    $"Bien: {rd["TipoBien"]}\n" +
+                    $"Monto: ${rd["Monto"]}";
+
+                contrato.Documento1 = rd["ContratoPDF"] as byte[];
+                contrato.Documento2 = rd["IdentificacionVendedor"] as byte[];
+                contrato.Documento3 = rd["IdentificacionComprador"] as byte[];
+            }
+
+            // ============ TESTAMENTO ============
+            if (contrato.TipoTramite == "TESTAMENTO")
+            {
+                contrato.Contenido =
+                    $"Estado civil: {rd["EstadoCivil"]}\n" +
+                    $"Tiene hijos: {rd["TieneHijos"]}\n" +
+                    $"Número de hijos: {rd["NumeroHijos"]}\n" +
+                    $"Bienes: {rd["BienesDeclarados"]}";
+            }
+
+            // ============ SUCESION ============
+            if (contrato.TipoTramite == "SUCESION")
+            {
+                contrato.Contenido =
+                    $"Tipo: {rd["TipoSucesion"]}\n" +
+                    $"Fallecido: {rd["NombreFallecido"]}\n" +
+                    $"Fecha defunción: {rd["FechaDefuncion"]}\n" +
+                    $"Herederos: {rd["NumeroHerederos"]}";
+            }
+
+            return contrato;
+        }
+
         // ===================== Funciones Admin =====================
 
         public async Task<List<TrabajadorItem>> ObtenerTrabajadoresAsync()
@@ -628,6 +920,65 @@ namespace Proyecto_servicio.DataBase
             catch
             {
                 transaction.Rollback();
+                throw;
+            }
+        }
+    }
+    public class TramiteCompraventaService : ConnectionToSQL
+    {
+        public async Task CrearTramiteCompraventaAsync(
+            string tipoBien,
+            string vendedor,
+            string comprador,
+            decimal monto,
+            byte[] contratoPdf,
+            byte[] contratoFirmado,
+            byte[] idVendedor,
+            byte[] idComprador)
+        {
+            using SqlConnection conn = GetConnection();
+            await conn.OpenAsync();
+            var tx = conn.BeginTransaction();
+
+            try
+            {
+                int idTramite;
+
+                using (var cmd = new SqlCommand(@"
+                INSERT INTO Tramites (ID_Usuario, TipoTramite)
+                OUTPUT INSERTED.ID_Tramite
+                VALUES (@ID_Usuario, 'COMPRAVENTA')", conn, tx))
+                {
+                    cmd.Parameters.Add("@ID_Usuario", SqlDbType.Int).Value = UserSession.IdUsuario;
+                    idTramite = (int)await cmd.ExecuteScalarAsync();
+                }
+
+                using (var cmd = new SqlCommand(@"
+                INSERT INTO TramiteCompraventa
+                (ID_Tramite, TipoBien, Vendedor, Comprador, Monto,
+                 ContratoPDF, ContratoFirmado, IdentificacionVendedor, IdentificacionComprador)
+                VALUES
+                (@ID_Tramite, @TipoBien, @Vendedor, @Comprador, @Monto,
+                 @ContratoPDF, @ContratoFirmado, @IdVendedor, @IdComprador)", conn, tx))
+                {
+                    cmd.Parameters.Add("@ID_Tramite", SqlDbType.Int).Value = idTramite;
+                    cmd.Parameters.Add("@TipoBien", SqlDbType.VarChar).Value = tipoBien;
+                    cmd.Parameters.Add("@Vendedor", SqlDbType.VarChar).Value = vendedor;
+                    cmd.Parameters.Add("@Comprador", SqlDbType.VarChar).Value = comprador;
+                    cmd.Parameters.Add("@Monto", SqlDbType.Decimal).Value = monto;
+                    cmd.Parameters.Add("@ContratoPDF", SqlDbType.VarBinary).Value = contratoPdf;
+                    cmd.Parameters.Add("@ContratoFirmado", SqlDbType.VarBinary).Value = (object)contratoFirmado ?? DBNull.Value;
+                    cmd.Parameters.Add("@IdVendedor", SqlDbType.VarBinary).Value = idVendedor;
+                    cmd.Parameters.Add("@IdComprador", SqlDbType.VarBinary).Value = idComprador;
+
+                    await cmd.ExecuteNonQueryAsync();
+                }
+
+                tx.Commit();
+            }
+            catch
+            {
+                tx.Rollback();
                 throw;
             }
         }

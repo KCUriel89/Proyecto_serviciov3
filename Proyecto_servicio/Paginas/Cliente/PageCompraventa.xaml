@@ -2,12 +2,15 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Proyecto_servicio.Paginas.PageCompraventa"
-             Title="PageCompraventa">
+             BackgroundColor="#dfdaca">
+   
     <Grid>
+        
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
+        
         <!-- Menu Button -->
         <HorizontalStackLayout Grid.Row="0" Padding="10,10,0,0">
             <Button x:Name="MenuButton"
@@ -26,14 +29,42 @@
                   Margin="10,50,0,0"
                   ZIndex="1"
                   WidthRequest="200">
-            <Button Text="Inicio" Clicked="OnPagina1Clicked"/>
-            <Button Text="Registro Compraventa" Clicked="OnPagina2Clicked"/>
+            <Button Text="Tramita tu INE" Clicked="OnPagina1Clicked"/>
+            <Button Text="Inicio" Clicked="OnPagina2Clicked"/>
             <Button Text="Testamentos" Clicked="OnPagina3Clicked"/>
             <Button Text="Cerrar sesión" Clicked="OnCerrarSesionClicked" BackgroundColor="#FF6666" TextColor="White"/>
         </StackLayout>
         <!-- Main Content -->
+
         <StackLayout Grid.Row="1" Padding="20">
-            <Label Text="Bienvenido a la página principal" FontSize="20"/>
+
+            <Label Text="Contrato de Compraventa"
+                   FontSize="22"
+                   HorizontalOptions="Center"
+                   FontAttributes="Bold"/>
+
+            <Entry x:Name="entryTipoBien" Placeholder="Tipo de bien (Casa, Auto, Terreno)" />
+            <Entry x:Name="entryVendedor" Placeholder="Nombre del vendedor" />
+            <Entry x:Name="entryComprador" Placeholder="Nombre del comprador" />
+            <Entry x:Name="entryMonto" Placeholder="Monto $ (000,000.00) " Keyboard="Numeric"/>
+
+
+            <Button Text="Subir identificación del vendedor"
+                    Clicked="BtnIdVendedor_Clicked"/>
+
+            <Button Text="Subir identificación del comprador"
+                    Clicked="BtnIdComprador_Clicked"/>
+
+            <Button Text="Generar y Guardar Contrato"
+                    BackgroundColor="#2E86C1"
+                    TextColor="White"
+                    Clicked="BtnGenerar_Clicked"/>
+
+            <Button Text="Imprimir Contrato"
+                    BackgroundColor="#27AE60"
+                    TextColor="White"
+                    Clicked="BtnImprimir_Clicked"/>
+
         </StackLayout>
     </Grid>
 </ContentPage>

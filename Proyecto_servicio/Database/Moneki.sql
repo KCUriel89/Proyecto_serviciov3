@@ -155,3 +155,15 @@ ALTER COLUMN ComprobanteDomicilio VARBINARY(MAX) NULL;
 
 ALTER TABLE TramiteINE
 ALTER COLUMN Identificacion VARBINARY(MAX) NULL;
+
+ALTER TABLE TramiteCompraventa
+ADD ContratoPDF VARBINARY(MAX)
+
+
+ALTER TABLE TramiteCompraventa
+ADD 
+    Monto DECIMAL(18,2),
+    ContratoPDF VARBINARY(MAX),
+    ContratoFirmado VARBINARY(MAX),
+    IdentificacionVendedor VARBINARY(MAX),
+    IdentificacionComprador VARBINARY(MAX);

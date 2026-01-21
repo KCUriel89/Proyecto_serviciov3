@@ -105,13 +105,14 @@
                 Clicked="OnMisTramitesClicked"/>
 
             <Button
-                Text="Funcion no implementada"
+                Text="Mis contratos"
                 Grid.Column="1"
                 BackgroundColor="#005f73"
                 TextColor="White"
                 FontAttributes="Bold"
                 CornerRadius="12"
                 HeightRequest="50"
+                Clicked="OnMisContratosClicked"
 />
 
         </Grid>

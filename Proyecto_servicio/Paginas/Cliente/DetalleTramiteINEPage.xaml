@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Proyecto_servicio.Paginas.DetalleTramiteINEPage"
+             Title="DetalleTramiteINEPage">
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="15">
+
+            <!-- Información General -->
+            <Frame BorderColor="Gray" Padding="15">
+                <VerticalStackLayout Spacing="5">
+                    <Label x:Name="lblTipo" FontSize="18" FontAttributes="Bold" />
+                    <Label x:Name="lblId" />
+                    <Label x:Name="lblEstado" TextColor="DarkBlue" />
+                    <Label x:Name="lblFecha" />
+                    <Label x:Name="lblUsuario" />
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- Contenido -->
+            <Frame BorderColor="LightGray" Padding="15">
+                <Label x:Name="lblContenido" FontSize="14"/>
+            </Frame>
+
+            <!-- Documentos -->
+            <Frame BorderColor="Gray" Padding="15">
+                <VerticalStackLayout Spacing="10">
+                    <Label Text="Documentos entregados" FontAttributes="Bold"/>
+
+                    <Button x:Name="btnDocumento1" Text="Ver Acta de Nacimiento" IsVisible="False"/>
+                    <Button x:Name="btnDocumento2" Text="Ver Comprobante de Domicilio" IsVisible="False"/>
+                    <Button x:Name="btnDocumento3" Text="Ver Identificación Oficial" IsVisible="False"/>
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- Acciones -->
+            <Frame BorderColor="LightGray" Padding="15">
+                <VerticalStackLayout Spacing="10">
+                    <Button x:Name="btnPdf" Text="Ver Identificación"/>
+                    <Button x:Name="btnImprimir" Text="Imprimir documentos"/>
+                </VerticalStackLayout>
+            </Frame>
+
+        </VerticalStackLayout>
+    </ScrollView>
+
+</ContentPage>

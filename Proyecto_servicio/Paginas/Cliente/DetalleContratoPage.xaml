@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Proyecto_servicio.Paginas.DetalleContratoPage"
+             Title="DetalleContratoPage">
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="15">
+
+            <!-- Tipo de trámite -->
+            <Label x:Name="lblTipo"
+                   FontSize="22"
+                   FontAttributes="Bold"
+                   HorizontalOptions="Center" />
+
+            <!-- Estado -->
+            <Frame BackgroundColor="#EEE" Padding="10">
+                <Label x:Name="lblEstado"
+                       FontAttributes="Bold"
+                       HorizontalOptions="Center"/>
+            </Frame>
+
+            <!-- Datos generales -->
+            <Frame BorderColor="Gray" Padding="15">
+                <VerticalStackLayout Spacing="8">
+                    <Label Text="Información del trámite" FontAttributes="Bold"/>
+                    <Label x:Name="lblId"/>
+                    <Label x:Name="lblFecha"/>
+                    <Label x:Name="lblUsuario"/>
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- Contenido del contrato o trámite -->
+            <Frame BorderColor="Black" Padding="15">
+                <VerticalStackLayout>
+                    <Label Text="Contenido" FontAttributes="Bold" FontSize="18"/>
+                    <Label x:Name="lblContenido"
+                           LineBreakMode="WordWrap"/>
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- Documentos -->
+            <Frame BorderColor="Gray" Padding="15">
+                <VerticalStackLayout Spacing="10">
+                    <Label Text="Documentos Adjuntos" FontAttributes="Bold"/>
+
+                    <Button x:Name="btnDocumento1"
+                            Text="Ver Documento 1"
+                            IsVisible="False"/>
+
+                    <Button x:Name="btnDocumento2"
+                            Text="Ver Documento 2"
+                            IsVisible="False"/>
+
+                    <Button x:Name="btnDocumento3"
+                            Text="Ver Documento 3"
+                            IsVisible="False"/>
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- Botones -->
+            <HorizontalStackLayout Spacing="15" HorizontalOptions="Center">
+
+                <Button Text="Descargar PDF"
+                        BackgroundColor="#2196F3"
+                        TextColor="White"
+                        Clicked="BtnPdf_Clicked"/>
+
+                <Button Text="Imprimir"
+                        BackgroundColor="#4CAF50"
+                        TextColor="White"
+                        Clicked="BtnImprimir_Clicked"/>
+
+            </HorizontalStackLayout>
+
+        </VerticalStackLayout>
+    </ScrollView>
+
+</ContentPage>
